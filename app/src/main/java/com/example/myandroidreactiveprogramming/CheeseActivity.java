@@ -1,5 +1,7 @@
 package com.example.myandroidreactiveprogramming;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import java.util.List;
@@ -48,7 +50,9 @@ public class CheeseActivity extends BaseSearchActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Observable<String> searchTextObservable = createButtonClickObservable();
+
+        //Observable<String> searchTextObservable = createButtonClickObservable();
+        Observable<String> searchTextObservable = createTextChangeObservable();
 
         searchTextObservable
                 // 1
@@ -76,5 +80,43 @@ public class CheeseActivity extends BaseSearchActivity {
                         showResult(result);
                     }
                 });
+    }
+
+    //1
+    private Observable<String> createTextChangeObservable() {
+        //2
+        Observable<String> textChangeObservable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(final ObservableEmitter<String> emitter) throws Exception {
+                //3
+                final TextWatcher watcher = new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+
+                    //4
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        emitter.onNext(s.toString());
+                    }
+                };
+
+                //5
+                mQueryEditText.addTextChangedListener(watcher);
+
+                //6
+                emitter.setCancellable(new Cancellable() {
+                    @Override
+                    public void cancel() throws Exception {
+                        mQueryEditText.removeTextChangedListener(watcher);
+                    }
+                });
+            }
+        });
+
+        // 7
+        return textChangeObservable;
     }
 }
