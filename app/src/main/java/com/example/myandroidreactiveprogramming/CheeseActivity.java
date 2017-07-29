@@ -5,6 +5,7 @@ import android.text.TextWatcher;
 import android.view.View;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -125,6 +126,6 @@ public class CheeseActivity extends BaseSearchActivity {
                 public boolean test(String query) throws Exception {
                     return query.length() >= 2;
                 }
-            });
+            }).debounce(1000, TimeUnit.MILLISECONDS);  // add this line
     }
 }
