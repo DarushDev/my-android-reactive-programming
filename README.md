@@ -1,7 +1,7 @@
 # my-android-reactive-programming
 Simple android app to showcase RxAndroid library and reactive programming in android.
 
-Images to bee added soon...
+![Image](../master/app/src/main/assets/screenshot1.gif)
 
 Libraries used:
 - [RxAndroid](https://github.com/ReactiveX/RxAndroid)
